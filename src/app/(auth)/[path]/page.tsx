@@ -35,6 +35,11 @@ export default function AuthPages() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const deepLinkPath = searchParams.get("source");
+  if (deepLinkPath) {
+    localStorage.setItem("deepLinkPath", deepLinkPath);
+  }
+
   let redirectPath = searchParams.get("redirect");
 
   if (redirectPath) {

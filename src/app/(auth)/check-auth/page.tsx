@@ -9,6 +9,7 @@ import { useRouter } from "nextjs-toploader/app";
 import { AUTH_ROUTES } from "@/constants";
 import { useGoogleRedirectMutation } from "@/services/auth";
 import { setTokens } from "@/utils";
+import { deepLink } from "@/utils/deepLink";
 
 function CheckAuthContent() {
   const searchParams = useSearchParams();
@@ -37,8 +38,8 @@ function CheckAuthContent() {
             code,
             error,
           }).unwrap();
-
-          setTokens(token);
+          if (process.env.NEXT_PUBLIC_ORIGIN === "app") deepLink(token);
+          else setTokens(token);
 
           if (status === 200) {
             setTimeout(() => {

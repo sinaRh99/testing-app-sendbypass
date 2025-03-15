@@ -1,5 +1,6 @@
 import { sendbypassApi } from "@/services/base";
 import { setTokens } from "@/utils";
+import { deepLink } from "@/utils/deepLink";
 
 import { SignInBody, SignInResponse } from "./types";
 
@@ -16,7 +17,8 @@ export const signinApi = sendbypassApi.injectEndpoints({
         };
       },
       transformResponse: (response: SignInResponse) => {
-        setTokens(response);
+        if (process.env.NEXT_PUBLIC_ORIGIN === "app") deepLink(response);
+        else setTokens(response);
       },
     }),
   }),
