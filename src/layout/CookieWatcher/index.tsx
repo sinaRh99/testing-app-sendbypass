@@ -31,6 +31,7 @@ export default function CookieWatcher() {
               message: "NO-TOKEN",
             });
             window.ReactNativeWebView.postMessage(message);
+            refreshRouter();
           }
         }
       }
