@@ -31,14 +31,27 @@ export const RefreshTokenProvider = ({ children }: BaseComponentProps) => {
         if (isRefreshing) return;
         isRefreshing = true;
         try {
-          const { access } = await refreshToken().unwrap();
-          const newParsedToken = tokenParser(access);
-          setToken(
-            "access",
-            access,
-            Math.ceil(newParsedToken.exp - now / 1000),
-          );
-          refreshRouter();
+          const { access, refresh } = await refreshToken().unwrap();
+          if (process.env.NEXT_PUBLIC_ORIGIN == "app") {
+            if (window.ReactNativeWebView) {
+              const message = JSON.stringify({
+                message: "TOKEN",
+                data: {
+                  access,
+                  refresh,
+                },
+              });
+              window.ReactNativeWebView.postMessage(message);
+            }
+          } else {
+            const newParsedToken = tokenParser(access);
+            setToken(
+              "access",
+              access,
+              Math.ceil(newParsedToken.exp - now / 1000),
+            );
+            refreshRouter();
+          }
         } catch (error) {
           console.log("Failed to refresh token", error);
         } finally {
@@ -48,14 +61,27 @@ export const RefreshTokenProvider = ({ children }: BaseComponentProps) => {
         if (isRefreshing) return;
         isRefreshing = true;
         try {
-          const { access } = await refreshToken().unwrap();
-          const newParsedToken = tokenParser(access);
-          setToken(
-            "access",
-            access,
-            Math.ceil(newParsedToken.exp - now / 1000),
-          );
-          refreshRouter();
+          const { access, refresh } = await refreshToken().unwrap();
+          if (process.env.NEXT_PUBLIC_ORIGIN == "app") {
+            if (window.ReactNativeWebView) {
+              const message = JSON.stringify({
+                message: "TOKEN",
+                data: {
+                  access,
+                  refresh,
+                },
+              });
+              window.ReactNativeWebView.postMessage(message);
+            }
+          } else {
+            const newParsedToken = tokenParser(access);
+            setToken(
+              "access",
+              access,
+              Math.ceil(newParsedToken.exp - now / 1000),
+            );
+            refreshRouter();
+          }
         } catch (error) {
           console.log("Failed to refresh token", error);
         } finally {
