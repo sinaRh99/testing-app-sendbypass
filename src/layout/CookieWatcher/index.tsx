@@ -1,34 +1,46 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+import Cookies from "js-cookie";
 
 export default function CookieWatcher() {
+  const [access, setAccess] = useState<null | undefined | string>(null);
+  const [refresh, setRefresh] = useState<null | undefined | string>(null);
+
   useEffect(() => {
-    const observer = new MutationObserver(() => {
-      const cookies = document.cookie.split("; ");
-      const hasAccess = cookies.some((cookie) => cookie.startsWith("access="));
-      const hasRefresh = cookies.some((cookie) =>
-        cookie.startsWith("refresh="),
-      );
-      if (window.ReactNativeWebView) {
-        if (hasAccess && hasRefresh) {
-          const message = JSON.stringify({
-            message: "HAS-TOKEN",
-          });
-          window.ReactNativeWebView.postMessage(message);
-        } else {
-          const message = JSON.stringify({
-            message: "NO-TOKEN",
-          });
-          window.ReactNativeWebView.postMessage(message);
+    const cookieInterval = setInterval(() => {
+      const newAccess = Cookies.get("access");
+
+      const newRefresh = Cookies.get("refresh");
+
+      if (newAccess !== access || newRefresh !== refresh) {
+        setAccess(newAccess);
+        setRefresh(newRefresh);
+        if (window.ReactNativeWebView) {
+          if (!!newAccess && !!newRefresh) {
+            const message = JSON.stringify({
+              message: "HAS-TOKEN",
+            });
+            window.ReactNativeWebView.postMessage(message);
+          } else {
+            const message = JSON.stringify({
+              message: "NO-TOKEN",
+            });
+            window.ReactNativeWebView.postMessage(message);
+          }
         }
       }
-    });
+    }, 1000);
+    // const observer = new MutationObserver(() => {});
 
-    observer.observe(document, { subtree: true, childList: true });
-
-    return () => observer.disconnect();
+    return () => clearInterval(cookieInterval);
   }, []);
 
-  return null;
+  return (
+    <div>
+      <div> access : {access}</div>
+      <div> refresh : {refresh}</div>
+    </div>
+  );
 }
