@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 
 import Cookies from "js-cookie";
-import { useRouter } from "nextjs-toploader/app";
+// import { useRouter } from "nextjs-toploader/app";
 
 export default function CookieWatcher() {
   const [access, setAccess] = useState<null | undefined | string>(null);
   const [refresh, setRefresh] = useState<null | undefined | string>(null);
-  const { refresh: refreshRouter } = useRouter();
+  // const { refresh: refreshRouter } = useRouter();
 
   useEffect(() => {
     const cookieInterval = setInterval(async () => {
@@ -25,13 +25,13 @@ export default function CookieWatcher() {
               message: "HAS-TOKEN",
             });
             window.ReactNativeWebView.postMessage(message);
-            refreshRouter();
+            // refreshRouter();
           } else {
             const message = JSON.stringify({
               message: "NO-TOKEN",
             });
             window.ReactNativeWebView.postMessage(message);
-            refreshRouter();
+            // refreshRouter();
           }
         }
       }
