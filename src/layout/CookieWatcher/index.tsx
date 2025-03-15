@@ -4,12 +4,15 @@ import { useEffect, useState } from "react";
 
 import Cookies from "js-cookie";
 
+import { useLazyProfileQuery } from "@/services/profile";
+
 export default function CookieWatcher() {
   const [access, setAccess] = useState<null | undefined | string>(null);
   const [refresh, setRefresh] = useState<null | undefined | string>(null);
+  const [getProfile] = useLazyProfileQuery();
 
   useEffect(() => {
-    const cookieInterval = setInterval(() => {
+    const cookieInterval = setInterval(async () => {
       const newAccess = Cookies.get("access");
 
       const newRefresh = Cookies.get("refresh");
@@ -23,6 +26,7 @@ export default function CookieWatcher() {
               message: "HAS-TOKEN",
             });
             window.ReactNativeWebView.postMessage(message);
+            await getProfile();
           } else {
             const message = JSON.stringify({
               message: "NO-TOKEN",
@@ -35,7 +39,7 @@ export default function CookieWatcher() {
     // const observer = new MutationObserver(() => {});
 
     return () => clearInterval(cookieInterval);
-  }, []);
+  }, [access, refresh]);
 
   return (
     <div>
