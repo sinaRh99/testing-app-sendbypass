@@ -7,7 +7,7 @@ import NextTopLoader from "nextjs-toploader";
 import { Provider } from "react-redux";
 
 import { BaseComponentProps } from "@/components/types";
-import { BottomNavigation, Footer, SuspensedHeader } from "@/layout";
+// import { BottomNavigation, Footer, SuspensedHeader } from "@/layout";
 import { store } from "@/store";
 import { theme } from "@/theme";
 
@@ -20,9 +20,9 @@ export const Providers = ({ children }: BaseComponentProps) => {
         <RefreshTokenProvider>
           <CssBaseline />
           <div className="flex flex-col pb-80 min-h-screen md:pb-0">
-            <SuspensedHeader />
+            {/* <SuspensedHeader /> */}
             <Container className="!grow !pt-16 md:!pt-24">{children}</Container>
-            <Footer />
+            {/* <Footer /> */}
           </div>
           <NextTopLoader
             color="rgb(var(--primary))"
@@ -39,7 +39,7 @@ export const Providers = ({ children }: BaseComponentProps) => {
             zIndex={1600}
             showAtBottom={false}
           />
-          <BottomNavigation />
+          {/* <BottomNavigation /> */}
         </RefreshTokenProvider>
       </Provider>
     </ThemeProvider>
